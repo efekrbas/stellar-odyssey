@@ -266,7 +266,7 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
   }
 
   // GAME OVER EKRANI
-  if (balances.FUEL === 0 && balances.XLM < 2) {
+  if (gameStarted && balances.FUEL === 0 && !isPaused) {
     return (
       <div className="ui-container" style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,0,0,0.1)', backdropFilter: 'blur(5px)', pointerEvents: 'auto' }}>
         <div className="glass-panel" style={{ padding: '50px', textAlign: 'center', maxWidth: '500px', border: '1px solid rgba(255,0,0,0.5)' }}>
@@ -274,7 +274,7 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
             GAME OVER
           </h1>
           <p style={{ color: 'var(--text-primary)', marginBottom: '10px', fontSize: '1.1rem', lineHeight: '1.5' }}>
-            You ran out of Fuel and don't have enough XLM to buy more.
+            You ran out of Fuel.
           </p>
           <p style={{ marginBottom: '20px' }}>
             <strong style={{fontSize: '1.5rem', color: 'var(--accent-cyan)'}}>Final Score: {balances.SCORE} Parsecs</strong>
