@@ -20,7 +20,7 @@ export const connectWallet = async () => {
     }
   } catch (error) {
     console.error("Wallet connection failed:", error);
-    alert("Connection to Freighter failed or was rejected.");
+    alert("Connection to Freighter failed. Please make sure Freighter Wallet is installed, unlocked, and you grant permission to the app.");
     return null;
   }
 };
