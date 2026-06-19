@@ -201,12 +201,29 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
             {/* OYUN KONTROLLERİ */}
             <div style={{ marginBottom: '30px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
               <h3 style={{ color: 'white', marginBottom: '15px', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>How to Play</h3>
-              <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <kbd style={{ background: '#222', padding: '4px 8px', borderRadius: '4px', color: 'var(--accent-cyan)', borderBottom: '2px solid #111', fontFamily: 'monospace' }}>W A S D</kbd> Move Ship
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <kbd style={{ background: '#222', padding: '4px 8px', borderRadius: '4px', color: '#ff0055', borderBottom: '2px solid #111', fontFamily: 'monospace' }}>MOUSE</kbd> Aim & Shoot
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '15px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <kbd style={{ background: '#222', padding: '2px 6px', borderRadius: '4px', color: 'white', borderBottom: '2px solid #111', fontFamily: 'monospace' }}>F</kbd> Buy Fuel
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <kbd style={{ background: '#222', padding: '2px 6px', borderRadius: '4px', color: 'white', borderBottom: '2px solid #111', fontFamily: 'monospace' }}>R</kbd> Sell Ore
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <kbd style={{ background: '#222', padding: '2px 6px', borderRadius: '4px', color: 'white', borderBottom: '2px solid #111', fontFamily: 'monospace' }}>E</kbd> Shield
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <kbd style={{ background: '#222', padding: '2px 6px', borderRadius: '4px', color: 'white', borderBottom: '2px solid #111', fontFamily: 'monospace' }}>T</kbd> Auto-Sell
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <kbd style={{ background: '#222', padding: '2px 6px', borderRadius: '4px', color: 'white', borderBottom: '2px solid #111', fontFamily: 'monospace' }}>ESC</kbd> Pause
                 </div>
               </div>
             </div>
