@@ -5,9 +5,7 @@ export const connectWallet = async () => {
   try {
     const connected = await isConnected();
     if (!connected) {
-      if (window.confirm("Freighter Wallet is not installed or not detected! Do you want to play in Demo Mode instead? (Demo Modunda oynamak ister misin?)")) {
-        return "GA_MOCK_WALLET_DEMO_ACCOUNT_FOR_HACKATHON";
-      }
+      alert("Freighter Wallet is not installed or not detected! Please install it from https://freighter.app/ to play.");
       return null;
     }
 
@@ -22,9 +20,7 @@ export const connectWallet = async () => {
     }
   } catch (error) {
     console.error("Wallet connection failed:", error);
-    if (window.confirm("Connection to Freighter failed or was rejected. Do you want to play in Demo Mode instead? (Demo Modunda oynamak ister misin?)")) {
-      return "GA_MOCK_WALLET_DEMO_ACCOUNT_FOR_HACKATHON";
-    }
+    alert("Connection to Freighter failed or was rejected.");
     return null;
   }
 };

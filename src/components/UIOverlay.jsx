@@ -133,10 +133,8 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
       const currentHigh = parseInt(localStorage.getItem('stellarHighScore') || '0');
       if (balances.SCORE > currentHigh) {
         localStorage.setItem('stellarHighScore', balances.SCORE.toString());
-        if (wallet && wallet !== "GA_MOCK_WALLET_DEMO_ACCOUNT_FOR_HACKATHON") {
+        if (wallet) {
           localStorage.setItem('stellarHighPlayer', `${wallet.substring(0, 4)}...${wallet.substring(52)}`);
-        } else {
-          localStorage.setItem('stellarHighPlayer', `Demo Player`);
         }
       }
     }
@@ -145,7 +143,7 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
   };
 
   const handleSaveScore = async () => {
-    if (!wallet || wallet === "GA_MOCK_WALLET_DEMO_ACCOUNT_FOR_HACKATHON") {
+    if (!wallet) {
       alert("Please connect your Freighter wallet to save your score to the blockchain.");
       return;
     }
@@ -229,7 +227,7 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
             </div>
 
             <button className="glass-button" style={{ width: '100%', justifyContent: 'center', fontSize: '1.2rem', padding: '15px' }} onClick={handleConnect}>
-              {wallet && wallet !== "GA_MOCK_WALLET_DEMO_ACCOUNT_FOR_HACKATHON" ? <Rocket size={24} style={{ marginRight: '10px' }} /> : <Wallet size={24} style={{ marginRight: '10px' }} />}
+              {wallet ? <Rocket size={24} style={{ marginRight: '10px' }} /> : <Wallet size={24} style={{ marginRight: '10px' }} />}
               {wallet ? "Start Engine" : "Connect Wallet to Start"}
             </button>
           </div>
@@ -326,7 +324,7 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
           </button>
           <button className="glass-button">
             <Wallet size={18} />
-            {wallet && wallet !== "GA_MOCK_WALLET_DEMO_ACCOUNT_FOR_HACKATHON" ? `${wallet.substring(0, 6)}...${wallet.substring(52)}` : "Demo Mode"}
+            {wallet ? `${wallet.substring(0, 6)}...${wallet.substring(52)}` : "No Wallet"}
           </button>
         </div>
       </div>
