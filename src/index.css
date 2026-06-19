@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+@keyframes lowFuelPulse {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.low-fuel-warning {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff0055;
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055;
+  pointer-events: none;
+  z-index: 10;
+  animation: lowFuelPulse 1s infinite;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+:root {
+  --space-dark: #050510;
+  --space-light: #1a1a3a;
+  --accent-cyan: #00f0ff;
+  --accent-purple: #9d00ff;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0c0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--space-dark);
+  background-image: radial-gradient(circle at center, var(--space-light) 0%, var(--space-dark) 100%);
+  color: var(--text-primary);
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(26, 26, 58, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-button {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(157, 0, 255, 0.2));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.glass-button:hover {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), rgba(157, 0, 255, 0.4));
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+}
+
+.glass-button.danger {
+  background: linear-gradient(135deg, rgba(255, 0, 85, 0.2), rgba(157, 0, 255, 0.2));
+}
+.glass-button.danger:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 85, 0.4), rgba(157, 0, 255, 0.4));
+  box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
+}
+
+/* UI Layout */
+.ui-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px;
+  z-index: 10;
+}
+
+.ui-container > * {
+  pointer-events: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.game-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, var(--accent-cyan), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.game-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-top: -5px;
+}
+
+.dashboard {
+  padding: 20px;
+  min-width: 250px;
+  margin-top: 20px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--accent-cyan);
+}
+
+.bottom-bar {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.trade-panel {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 24px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.trade-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.loader {
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top: 3px solid var(--accent-cyan);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
