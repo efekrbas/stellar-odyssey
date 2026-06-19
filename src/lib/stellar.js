@@ -3,24 +3,29 @@ import { rpc, TransactionBuilder, Networks, Contract, Address, nativeToScVal, Tr
 
 export const connectWallet = async () => {
   try {
-    const connected = await isConnected();
-    if (!connected) {
+    const connectedRes = await isConnected();
+    if (connectedRes.error || !connectedRes.isConnected) {
       alert("Freighter Wallet is not installed or not detected! Please install it from https://freighter.app/ to play.");
       return null;
     }
 
-    const isAllowed = await setAllowed();
-    if (isAllowed) {
-      return await getAddress();
+    const isAllowedRes = await setAllowed();
+    if (isAllowedRes.error || !isAllowedRes.isAllowed) {
+      const accessRes = await requestAccess();
+      if (accessRes.error) {
+        throw new Error(accessRes.error);
+      }
+      return accessRes.address;
     }
     
-    const access = await requestAccess();
-    if (access) {
-      return await getAddress();
+    const addressRes = await getAddress();
+    if (addressRes.error) {
+      throw new Error(addressRes.error);
     }
+    return addressRes.address;
   } catch (error) {
     console.error("Wallet connection failed:", error);
-    alert("Connection to Freighter failed. Please make sure Freighter Wallet is installed, unlocked, and you grant permission to the app.");
+    alert("Freighter error details: " + (error.message || String(error)));
     return null;
   }
 };
@@ -30,7 +35,10 @@ const rpcServer = new rpc.Server("https://soroban-testnet.stellar.org");
 
 export async function saveScoreToBlockchain(score) {
   try {
-    const pubKey = await getAddress();
+    const pubKeyRes = await getAddress();
+    if (pubKeyRes.error) throw new Error(pubKeyRes.error);
+    const pubKey = pubKeyRes.address;
+
     if (!pubKey) throw new Error("Wallet not connected");
 
     const account = await rpcServer.getAccount(pubKey);
@@ -50,9 +58,11 @@ export async function saveScoreToBlockchain(score) {
       .build();
 
     const preparedTx = await rpcServer.prepareTransaction(tx);
-    const signedXdr = await signTransaction(preparedTx.toXDR(), { network: "TESTNET" });
     
-    const signedTx = TransactionBuilder.fromXDR(signedXdr, Networks.TESTNET);
+    const signedRes = await signTransaction(preparedTx.toXDR(), { networkPassphrase: Networks.TESTNET });
+    if (signedRes.error) throw new Error(signedRes.error);
+    
+    const signedTx = TransactionBuilder.fromXDR(signedRes.signedTxXdr, Networks.TESTNET);
     await rpcServer.sendTransaction(signedTx);
     
     return true;
