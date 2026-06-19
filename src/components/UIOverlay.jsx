@@ -18,6 +18,12 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [savingScore, setSavingScore] = useState(false);
   const [scoreSaved, setScoreSaved] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
   
   const isAnyBuying = buyingFuel || buyingShield || buyingAutoSell;
 
@@ -26,13 +32,13 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
       if (!gameStarted || isPaused) return;
       const key = e.key.toLowerCase();
       
-      if (key === 'f' && !isAnyBuying && balances.XLM >= 2) {
+      if (key === 'f' && !isAnyBuying) {
         handleBuyFuel();
-      } else if (key === 'e' && !isAnyBuying && !hasShield && balances.FUEL > 0 && balances.XLM >= 5) {
+      } else if (key === 'e' && !isAnyBuying) {
         handleBuyShield();
-      } else if (key === 'r' && !tradingSell && balances.ORE >= 10) {
+      } else if (key === 'r' && !tradingSell) {
         handleSellOre();
-      } else if (key === 't' && !isAnyBuying && !hasAutoSell && balances.FUEL > 0 && balances.XLM >= 15) {
+      } else if (key === 't' && !isAnyBuying) {
         handleBuyAutoSell();
       }
     };
@@ -75,53 +81,57 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
   };
 
   const handleSellOre = async () => {
-    if (!wallet) return alert("Please connect Freighter wallet first!");
-    if (balances.ORE < 10) return alert("Not enough ORE. You need 10 ORE to sell.");
+    if (!wallet) return;
+    if (balances.ORE < 10) return showToast("Not enough ORE. You need 10 ORE to sell.");
     
     setTradingSell(true);
     const success = await simulateTrade("ORE", "XLM", 10);
     if (success) {
       setBalances(prev => ({ ...prev, ORE: prev.ORE - 10, XLM: prev.XLM + 5 }));
+      showToast("+5 XLM");
     }
     setTradingSell(false);
   };
 
   const handleBuyFuel = async () => {
-    if (!wallet) return alert("Please connect Freighter wallet first!");
-    if (balances.XLM < 2) return alert("Not enough XLM. You need 2 XLM to buy fuel.");
+    if (!wallet) return;
+    if (balances.XLM < 2) return showToast("Not enough XLM. You need 2 XLM to buy fuel.");
     
     setBuyingFuel(true);
     const success = await simulateTrade("XLM", "FUEL", 2);
     if (success) {
       setBalances(prev => ({ ...prev, XLM: prev.XLM - 2, FUEL: prev.FUEL + 100 }));
+      showToast("+100 Fuel");
     }
     setBuyingFuel(false);
   };
 
   const handleBuyShield = async () => {
-    if (!wallet) return alert("Please connect Freighter wallet first!");
-    if (hasShield) return alert("You already have an active shield!");
-    if (balances.XLM < 5) return alert("Not enough XLM. You need 5 XLM to buy a shield.");
+    if (!wallet) return;
+    if (hasShield) return showToast("You already have an active shield!");
+    if (balances.XLM < 5) return showToast("Not enough XLM. You need 5 XLM to buy a shield.");
     
     setBuyingShield(true);
     const success = await simulateTrade("XLM", "SHIELD", 5);
     if (success) {
       setBalances(prev => ({ ...prev, XLM: prev.XLM - 5 }));
       setHasShield(true);
+      showToast("Shield Activated!");
     }
     setBuyingShield(false);
   };
 
   const handleBuyAutoSell = async () => {
-    if (!wallet) return alert("Please connect Freighter wallet first!");
-    if (hasAutoSell) return alert("You already have the Auto-Sell Module!");
-    if (balances.XLM < 15) return alert("Not enough XLM. You need 15 XLM to buy Auto-Sell.");
+    if (!wallet) return;
+    if (hasAutoSell) return showToast("You already have the Auto-Sell Module!");
+    if (balances.XLM < 15) return showToast("Not enough XLM. You need 15 XLM to buy Auto-Sell.");
     
     setBuyingAutoSell(true);
     const success = await simulateTrade("XLM", "AUTOSELL", 15);
     if (success) {
       setBalances(prev => ({ ...prev, XLM: prev.XLM - 15 }));
       setHasAutoSell(true);
+      showToast("Auto-Sell Activated!");
     }
     setBuyingAutoSell(false);
   };
@@ -285,6 +295,13 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
 
   return (
     <div className="ui-container">
+      {/* TOAST MESSAGE */}
+      {toastMessage && (
+        <div style={{ position: 'absolute', top: '100px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, padding: '15px 30px', backgroundColor: 'rgba(0,240,255,0.2)', border: '1px solid #00f0ff', color: 'white', borderRadius: '10px', backdropFilter: 'blur(10px)', fontSize: '1.1rem', fontWeight: 'bold', boxShadow: '0 0 20px rgba(0,240,255,0.4)', pointerEvents: 'none' }}>
+          {toastMessage}
+        </div>
+      )}
+
       {/* PAUSED EKRANI */}
       {isPaused && (
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 50, textAlign: 'center', pointerEvents: 'none' }}>
@@ -303,8 +320,9 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
 
       {/* LOW FUEL WARNING */}
       {gameStarted && balances.FUEL > 0 && balances.FUEL <= 30 && !isPaused && (
-        <div className="low-fuel-warning">
-          ⚠️ LOW FUEL ⚠️
+        <div className="low-fuel-warning" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <span>⚠️ LOW FUEL ⚠️</span>
+          <span style={{ fontSize: '1.2rem', color: 'white', marginTop: '5px' }}>Press <b style={{color: '#00f0ff'}}>[F]</b> to Buy Fuel</span>
         </div>
       )}
 
