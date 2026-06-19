@@ -7,7 +7,7 @@
 - **GitHub Repository:** [https://github.com/efekrbas/stellar-odyssey](https://github.com/efekrbas/stellar-odyssey)
 - **Video Demo:** `[Link to your YouTube/Loom video]`
 - **Presentation (PPT):** `[Link to your Presentation/Canva/Google Slides]`
-- **Live Playable Demo:** `[Link to Vercel Deploy]`
+- **Live Playable Demo:** [https://play-stellar-odyssey.vercel.app/](https://play-stellar-odyssey.vercel.app/)
 
 ## 📜 Smart Contract
 - **Soroban Contract Address (Testnet):** `CBIBAPAABHHJIJRLAGCANYFXI5PAEBHOYP4Q23B3MOKDEXS6TVQPNY47`
