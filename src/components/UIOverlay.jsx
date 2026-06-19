@@ -18,6 +18,26 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
   const [showColorPicker, setShowColorPicker] = useState(false);
   
   const isAnyBuying = buyingFuel || buyingShield || buyingAutoSell;
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!gameStarted || isPaused) return;
+      const key = e.key.toLowerCase();
+      
+      if (key === 'f' && !isAnyBuying && balances.XLM >= 2) {
+        handleBuyFuel();
+      } else if (key === 'e' && !isAnyBuying && !hasShield && balances.FUEL > 0 && balances.XLM >= 5) {
+        handleBuyShield();
+      } else if (key === 'r' && !tradingSell && balances.ORE >= 10) {
+        handleSellOre();
+      } else if (key === 't' && !isAnyBuying && !hasAutoSell && balances.FUEL > 0 && balances.XLM >= 15) {
+        handleBuyAutoSell();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
   const [leaderboard, setLeaderboard] = useState(MOCK_LEADERBOARD);
 
   useEffect(() => {
@@ -277,28 +297,28 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
         <div style={{ marginBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "15px" }}>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem", marginBottom: "10px" }}>Sell Ore (10 Ore = 5 XLM)</p>
           <button className="glass-button" style={{ width: "100%", justifyContent: "center" }} onClick={handleSellOre} disabled={tradingSell || isPaused}>
-            {tradingSell ? <div className="loader"></div> : <><ArrowRightLeft size={18} /> Sell 10 Ore</>}
+            {tradingSell ? <div className="loader"></div> : <><ArrowRightLeft size={18} /> Sell 10 Ore <b style={{color: 'var(--accent-cyan)'}}>[R]</b></>}
           </button>
         </div>
 
         <div style={{ marginBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "15px" }}>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem", marginBottom: "10px" }}>Buy Fuel (2 XLM = 100 Fuel)</p>
           <button className="glass-button" style={{ width: "100%", justifyContent: "center" }} onClick={handleBuyFuel} disabled={isAnyBuying || isPaused}>
-            {buyingFuel ? <div className="loader"></div> : <><Zap size={18} /> Buy 100 Fuel</>}
+            {buyingFuel ? <div className="loader"></div> : <><Zap size={18} /> Buy 100 Fuel <b style={{color: 'var(--accent-cyan)'}}>[F]</b></>}
           </button>
         </div>
 
         <div style={{ marginBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "15px" }}>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem", marginBottom: "10px" }}>Energy Shield (5 XLM)</p>
           <button className="glass-button" style={{ width: "100%", justifyContent: "center", border: hasShield ? '1px solid #00f0ff' : 'none' }} onClick={handleBuyShield} disabled={isAnyBuying || hasShield || balances.FUEL === 0 || isPaused}>
-            {hasShield ? <><Shield size={18} color="#00f0ff" /> Shield Active</> : (buyingShield ? <div className="loader"></div> : <><Shield size={18} /> Buy Shield</>)}
+            {hasShield ? <><Shield size={18} color="#00f0ff" /> Shield Active</> : (buyingShield ? <div className="loader"></div> : <><Shield size={18} /> Buy Shield <b style={{color: 'var(--accent-cyan)'}}>[E]</b></>)}
           </button>
         </div>
 
         <div>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem", marginBottom: "10px" }}>Auto-Sell Module (15 XLM)</p>
           <button className="glass-button" style={{ width: "100%", justifyContent: "center", border: hasAutoSell ? '1px solid #9d00ff' : 'none' }} onClick={handleBuyAutoSell} disabled={isAnyBuying || hasAutoSell || balances.FUEL === 0 || isPaused}>
-            {hasAutoSell ? <><ArrowRightLeft size={18} color="#9d00ff" /> Module Active</> : (buyingAutoSell ? <div className="loader"></div> : <><ArrowRightLeft size={18} /> Buy Auto-Sell</>)}
+            {hasAutoSell ? <><ArrowRightLeft size={18} color="#9d00ff" /> Module Active</> : (buyingAutoSell ? <div className="loader"></div> : <><ArrowRightLeft size={18} /> Buy Auto-Sell <b style={{color: 'var(--accent-cyan)'}}>[T]</b></>)}
           </button>
         </div>
       </div>
