@@ -1,4 +1,4 @@
-import { requestAccess, setAllowed, getPublicKey, signTransaction, isConnected } from '@stellar/freighter-api';
+import { requestAccess, setAllowed, getAddress, signTransaction, isConnected } from '@stellar/freighter-api';
 import { rpc, TransactionBuilder, Networks, Contract, Address, nativeToScVal, Transaction } from '@stellar/stellar-sdk';
 
 export const connectWallet = async () => {
@@ -11,12 +11,12 @@ export const connectWallet = async () => {
 
     const isAllowed = await setAllowed();
     if (isAllowed) {
-      return await getPublicKey();
+      return await getAddress();
     }
     
     const access = await requestAccess();
     if (access) {
-      return await getPublicKey();
+      return await getAddress();
     }
   } catch (error) {
     console.error("Wallet connection failed:", error);
@@ -30,7 +30,7 @@ const rpcServer = new rpc.Server("https://soroban-testnet.stellar.org");
 
 export async function saveScoreToBlockchain(score) {
   try {
-    const pubKey = await getPublicKey();
+    const pubKey = await getAddress();
     if (!pubKey) throw new Error("Wallet not connected");
 
     const account = await rpcServer.getAccount(pubKey);
