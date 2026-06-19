@@ -1,9 +1,13 @@
 # 🚀 Stellar Odyssey
 
-**Stellar Odyssey** is a visually stunning 3D Web3 Space Survival game built for the **Stellar Hackathon**. It demonstrates the power and speed of the Soroban smart contract platform by allowing players to seamlessly trade in-game resources (Space Ore, Fuel, Energy Shields) across a 3D galaxy using the Freighter wallet.
+## 📖 Project Description
+**Stellar Odyssey** is a high-octane 3D Space Survival Game that merges arcade-style gameplay with decentralized finance (GameFi). Built specifically for the **Stellar Hackathon**, the game leverages the Soroban smart contract platform to showcase how on-chain economies can be seamlessly integrated into real-time, 60fps web experiences.
+
+Players navigate a dangerous asteroid field, mining valuable 'Space Ore' while dodging debris. To survive, they must interact with the **Neon Trade Post**, using their Freighter wallet to sell Ore for XLM, buy Fuel to keep their engines running, or purchase Energy Shields for protection. At the end of their run, players can submit their high score directly to the Stellar Testnet via a deployed Soroban Smart Contract.
+
+The project perfectly demonstrates Stellar's low fees, proving that Web3 games can be both incredibly fun and economically deep without sacrificing user experience.
 
 ## 🔗 Hackathon Submission Links
-- **Project Description:** `[Link to Devpost/Hackathon platform]`
 - **GitHub Repository:** [https://github.com/efekrbas/stellar-odyssey](https://github.com/efekrbas/stellar-odyssey)
 - **Video Demo:** `[Link to your YouTube/Loom video]`
 - **Presentation (PPT):** `[Link to your Presentation/Canva/Google Slides]`
