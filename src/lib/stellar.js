@@ -1,7 +1,8 @@
+import { requestAccess, setAllowed, getPublicKey, signTransaction, isConnected } from '@stellar/freighter-api';
+import { rpc, TransactionBuilder, Networks, Contract, Address, nativeToScVal, Transaction } from '@stellar/stellar-sdk';
+
 export const connectWallet = async () => {
   try {
-    const { requestAccess, setAllowed, getUserInfo, isConnected } = await import("@stellar/freighter-api");
-    
     const connected = await isConnected();
     if (!connected) {
       if (window.confirm("Freighter Wallet is not installed or not detected! Do you want to play in Demo Mode instead? (Demo Modunda oynamak ister misin?)")) {
@@ -12,14 +13,12 @@ export const connectWallet = async () => {
 
     const isAllowed = await setAllowed();
     if (isAllowed) {
-      const userInfo = await getUserInfo();
-      return userInfo.publicKey;
+      return await getPublicKey();
     }
     
     const access = await requestAccess();
     if (access) {
-      const userInfo = await getUserInfo();
-      return userInfo.publicKey;
+      return await getPublicKey();
     }
   } catch (error) {
     console.error("Wallet connection failed:", error);
@@ -29,6 +28,43 @@ export const connectWallet = async () => {
     return null;
   }
 };
+
+const CONTRACT_ID = "CBIBAPAABHHJIJRLAGCANYFXI5PAEBHOYP4Q23B3MOKDEXS6TVQPNY47";
+const rpcServer = new rpc.Server("https://soroban-testnet.stellar.org");
+
+export async function saveScoreToBlockchain(score) {
+  try {
+    const pubKey = await getPublicKey();
+    if (!pubKey) throw new Error("Wallet not connected");
+
+    const account = await rpcServer.getAccount(pubKey);
+    const contract = new Contract(CONTRACT_ID);
+    
+    const args = [
+      new Address(pubKey).toScVal(),
+      nativeToScVal(score, { type: "u32" })
+    ];
+
+    const tx = new TransactionBuilder(account, {
+      fee: "100000",
+      networkPassphrase: Networks.TESTNET,
+    })
+      .addOperation(contract.call("save_score", ...args))
+      .setTimeout(30)
+      .build();
+
+    const preparedTx = await rpcServer.prepareTransaction(tx);
+    const signedXdr = await signTransaction(preparedTx.toXDR(), { network: "TESTNET" });
+    
+    const signedTx = TransactionBuilder.fromXDR(signedXdr, Networks.TESTNET);
+    await rpcServer.sendTransaction(signedTx);
+    
+    return true;
+  } catch (error) {
+    console.error("Failed to save score:", error);
+    return false;
+  }
+}
 
 export const simulateTrade = async (fromAsset, toAsset, amount) => {
   console.log(`Simulating trade: ${amount} ${fromAsset} for ${toAsset}`);

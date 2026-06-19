@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { connectWallet, simulateTrade } from '../lib/stellar';
-import { Rocket, Wallet, ArrowRightLeft, Zap, Trophy, Shield, Volume2, VolumeX } from 'lucide-react';
+import { connectWallet, simulateTrade, saveScoreToBlockchain } from '../lib/stellar';
+import { Rocket, Wallet, ArrowRightLeft, Zap, Trophy, Shield, Volume2, VolumeX, Save } from 'lucide-react';
 
 const MOCK_LEADERBOARD = [
   { player: 'GAYL...A7X2', score: 342, isMe: false },
@@ -16,6 +16,8 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
   const [buyingShield, setBuyingShield] = useState(false);
   const [buyingAutoSell, setBuyingAutoSell] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [savingScore, setSavingScore] = useState(false);
+  const [scoreSaved, setScoreSaved] = useState(false);
   
   const isAnyBuying = buyingFuel || buyingShield || buyingAutoSell;
 
@@ -126,6 +128,7 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
 
   const handleRestart = () => {
     setShowColorPicker(false);
+    setScoreSaved(false);
     if (balances.SCORE > 0) {
       const currentHigh = parseInt(localStorage.getItem('stellarHighScore') || '0');
       if (balances.SCORE > currentHigh) {
@@ -139,6 +142,22 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
     }
     resetGame();
     setGameStarted(false); 
+  };
+
+  const handleSaveScore = async () => {
+    if (!wallet || wallet === "GA_MOCK_WALLET_DEMO_ACCOUNT_FOR_HACKATHON") {
+      alert("Please connect your Freighter wallet to save your score to the blockchain.");
+      return;
+    }
+    setSavingScore(true);
+    const success = await saveScoreToBlockchain(balances.SCORE);
+    if (success) {
+      setScoreSaved(true);
+      alert("Score successfully saved to the Soroban Testnet!");
+    } else {
+      alert("Failed to save score. Did you reject the transaction?");
+    }
+    setSavingScore(false);
   };
 
   if (!gameStarted && showColorPicker) {
@@ -232,9 +251,14 @@ export default function UIOverlay({ balances, setBalances, gameStarted, setGameS
           <p style={{ color: 'var(--text-primary)', marginBottom: '10px', fontSize: '1.1rem', lineHeight: '1.5' }}>
             You ran out of Fuel and don't have enough XLM to buy more.
           </p>
-          <p style={{ marginBottom: '40px' }}>
+          <p style={{ marginBottom: '20px' }}>
             <strong style={{fontSize: '1.5rem', color: 'var(--accent-cyan)'}}>Final Score: {balances.SCORE} Parsecs</strong>
           </p>
+
+          <button className="glass-button" style={{ width: '100%', justifyContent: 'center', fontSize: '1.1rem', padding: '15px', marginBottom: '15px', border: '1px solid #9d00ff', backgroundColor: 'rgba(157,0,255,0.2)' }} onClick={handleSaveScore} disabled={savingScore || scoreSaved}>
+            {savingScore ? <div className="loader"></div> : <><Save size={20} style={{ marginRight: '10px' }} /> {scoreSaved ? "Saved to Testnet!" : "Save Score to Soroban Testnet"}</>}
+          </button>
+
           <button className="glass-button danger" style={{ width: '100%', justifyContent: 'center', fontSize: '1.2rem', padding: '15px' }} onClick={handleRestart}>
             <Rocket size={24} style={{ marginRight: '10px' }} />
             Return to Base

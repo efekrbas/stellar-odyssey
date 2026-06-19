@@ -10,8 +10,8 @@
 - **Live Playable Demo:** `[Link to Vercel Deploy]`
 
 ## 📜 Smart Contract
-- **Soroban Contract Address (Testnet):** `[YOUR_SOROBAN_CONTRACT_ADDRESS_HERE]`
-*(Note: Replace the above address with your deployed testnet contract ID before final submission)*
+- **Soroban Contract Address (Testnet):** `CBIBAPAABHHJIJRLAGCANYFXI5PAEBHOYP4Q23B3MOKDEXS6TVQPNY47`
+*(Note: This contract serves as a Decentralized Leaderboard. Players can write their high scores to the Soroban Testnet after their run. In-game fuel/ore trading mechanics are simulated in the frontend to preserve 60fps action gameplay without ledger wait times.)*
 
 ## 🎮 Features
 - **Immersive 3D Experience:** Built with React Three Fiber, featuring bloom effects, dynamic lighting, particle explosions, and orbital mechanics.

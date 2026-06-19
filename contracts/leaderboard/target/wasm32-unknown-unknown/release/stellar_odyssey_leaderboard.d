@@ -1,0 +1,1 @@
+C:\Users\medios\Desktop\stellar-hackathon\stellar-odyssey\contracts\leaderboard\target\wasm32-unknown-unknown\release\stellar_odyssey_leaderboard.wasm: C:\Users\medios\Desktop\stellar-hackathon\stellar-odyssey\contracts\leaderboard\src\lib.rs
