@@ -10,7 +10,7 @@ The project perfectly demonstrates Stellar's low fees, proving that Web3 games c
 ## 🔗 Hackathon Submission Links
 - **GitHub Repository:** [https://github.com/efekrbas/stellar-odyssey](https://github.com/efekrbas/stellar-odyssey)
 - **Video Demo:** `[Link to your YouTube/Loom video]`
-- **Presentation (PPT):** `[Link to your Presentation/Canva/Google Slides]`
+- **Presentation (PPT):** [Google Slides Presentation](https://docs.google.com/presentation/d/1bqKV5EJ1uo66BgrzRnJmnUHdT5k07H_y-cdi1QKXuAY/edit?usp=sharing)
 - **Live Playable Demo:** [https://play-stellar-odyssey.vercel.app/](https://play-stellar-odyssey.vercel.app/)
 
 ## 📜 Smart Contract
